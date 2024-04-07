@@ -92,6 +92,7 @@ Before running the application, you need to set up the database. This project in
    - Click on the "Databases" tab at the top of the page.
    - Enter a name for your new database (e.g., `joijiDB`) in the "Create database" field.
    - Click the "Create" button.
+   ![Alt Text](/init-database.gif)
 
 2. **Import the Database Structure**
 
@@ -105,6 +106,8 @@ Before running the application, you need to set up the database. This project in
    - With your new database still selected, click on the "Import" tab again.
    - Click the "Choose File" button under "File to Import" and select the `Example.SQL` file from your local machine.
    - Click the "Go" button at the bottom of the page to import the example data.
+
+   ![Alt Text](/insert-example.gif)
 
 After importing the `Database.SQL` and `Example.SQL` files, your database should be set up and ready to use with the application.
 
