@@ -1,124 +1,128 @@
-# Joiji: A Movie Display App 🎬
+### Joiji: A Movie Rental App 🎬
 
-**🎓 This project is developed as part of the CS251 course.**
+**Welcome to Joiji, a movie rental application developed as part of the CS251 (Database System) course. This React application fetches a list of movies from an API and displays them in a grid layout, each represented by a poster image. The application includes a navigation bar and a menu bar, providing a user-friendly interface for browsing and renting movies.**
 
-Welcome to Joiji, a React application that fetches a list of movies from an API and displays them in a grid layout. Each movie is represented by a poster image. The application also includes a navigation bar and a menu bar.
+![Joiji App Screenshot](/app-screenshot.png)
 
-![App Screenshot](/app-screenshot.png)
+## Getting Started 🚀
 
-## 🚀 Getting Started
+Follow these steps to get Joiji up and running on your local machine.
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+### Prerequisites 📋
 
-### 📋 Prerequisites
+Ensure you have the following installed:
 
-- Node.js and npm installed on your machine. You can download them from [here](https://nodejs.org/en/).
-- Git installed on your machine. You can download it from [here](https://git-scm.com/).
-- Docker installed on your machine. You can download it from [here](https://www.docker.com/get-started/).
+- Node.js and npm (Download [here](https://nodejs.org/en/))
+- Git (Download [here](https://git-scm.com/))
+- Docker (Download [here](https://www.docker.com/get-started/))
 
-### 🔧 Installation
+### Installation 🔧
 
-1. **Clone the repository**
+#### Using Docker
 
-Get a copy of the project on your local machine with:
+1. **Pull Docker Images:**
+
+```sh
+docker pull mysql
+docker pull phpmyadmin
+```
+
+2. **Start MySQL Server:**
+
+Replace `/path/to/your/data` with the path where you want to store your MySQL data:
+
+```sh
+docker run --name mysql-server -p 3306:3306 -v /path/to/your/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=joijiDB -d mysql
+```
+
+3. **Start phpMyAdmin:**
+
+```sh
+docker run --name phpmyadmin -d --link mysql-server:db -p 8080:80 phpmyadmin
+```
+
+#### Project Setup
+
+1. **Clone the repository:**
+
 ```sh
 git clone https://github.com/rapeephong-6509681216/joiji.git
-```
-
-2. **Navigate to the project directory:**
-
-Change your working directory to the project's root:
-```sh
 cd joiji
 ```
+2. **Install Dependencies:**
 
-3. **Install Client Dependencies:**
+##### Install client dependencies
 
-Navigate to the client directory and install the required dependencies:
 ```sh
 cd client
 npm install
 ```
 
-4. **Install Server Dependencies:**
+##### Install server dependencies
 
-Navigate to the server directory and install the required dependencies:
 ```sh
 cd ../server
 npm install
 ```
-5. **Start MySQL Server with Docker:**
 
-Start a MySQL server using Docker. Replace /path/to/your/data with the path where you want to store your MySQL data:
+3. **Start the Server and Client:**
+
+##### Start the server
+
 ```sh
-docker run --name mysql-server -p 3306:3306 -v /path/to/your/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=joijiDB -d mysql
+cd ../server
+npm run dev
 ```
 
-6. **Start phpMyAdmin with Docker:**
+##### Start the client
 
-Start phpMyAdmin using Docker. Replace mysql-server with the name of your MySQL Docker container:
 ```sh
-docker run --name phpmyadmin -d --link mysql-server:db -p 8080:80 phpmyadmin/phpmyadmin
+cd ../client
+npm run dev
 ```
-
-7. **Start the Server:**
 
 Start the development server:
 ```sh
 npm run dev
 ```
 
-8. **Start the Client:**
+4. **Access the Application:**
+- **Client:** [http://localhost:5173](http://localhost:5173)
+- **Server:** [http://localhost:3000](http://localhost:3000)
+- **phpMyAdmin:** [http://localhost:8080](http://localhost:8080) (Username: `root`, Password: `root`)
 
-In a new terminal window, navigate back to the client directory and start the client:
-```sh
-cd ../client
-npm run dev
-```
+### Database Setup 🗄️
 
-9. **Access the Application:**
+1. **Create Database:**
+- Open phpMyAdmin, create a new database named `joijiDB`.
 
-- 🌐 The client can be accessed at [http://localhost:5173](http://localhost:5173)
-- 🌐 The server is running at [http://localhost:3000](http://localhost:3000)
-- 🌐 phpMyAdmin can be accessed at [http://localhost:8080](http://localhost:8080)
+![Alt Text](/init-database.gif)
 
-### 🗄️ Database Setup
+2. **Import Database Structure:**
+- Select `joijiDB`, go to "Import", and upload `Database.SQL`.
 
-Before running the application, you need to set up the database. This project includes two SQL files, `Database.SQL` and `Example.SQL`, which are used to create the database structure and populate it with example data.
+3. **Import Example Data:**
+- Still in `joijiDB`, go to "Import" again, and upload `Example.SQL`.
 
-1. **Create a New Database**
+![Alt Text](/insert-example.gif)
 
-   - Open phpMyAdmin in your web browser.
-   - Click on the "Databases" tab at the top of the page.
-   - Enter a name for your new database (e.g., `joijiDB`) in the "Create database" field.
-   - Click the "Create" button.
-   ![Alt Text](/init-database.gif)
+Your database should now be set up and ready for use with Joiji!
 
-2. **Import the Database Structure**
+## Environment Variables 🌍
 
-   - Click on the name of your new database in the left sidebar to select it.
-   - Click on the "Import" tab at the top of the page.
-   - Click the "Choose File" button under "File to Import" and select the `Database.SQL` file from your local machine.
-   - Click the "Go" button at the bottom of the page to import the database structure.
-
-3. **Import the Example Data**
-
-   - With your new database still selected, click on the "Import" tab again.
-   - Click the "Choose File" button under "File to Import" and select the `Example.SQL` file from your local machine.
-   - Click the "Go" button at the bottom of the page to import the example data.
-
-   ![Alt Text](/insert-example.gif)
-
-After importing the `Database.SQL` and `Example.SQL` files, your database should be set up and ready to use with the application.
-
-## 🌍 Environment Variables
 This project uses the following environment variables:
 
-VITE_API_URL: The base URL of the API.
-VITE_PATH_POSTER: The base path for movie poster images.
+- `VITE_API_URL`: Base URL of the API.
+- `VITE_PATH_POSTER`: Base path for movie poster images.
 
-## 🤝 Contributing
-This project is a collaborative effort between me and my friend. We welcome contributions, issues, and feature requests! Feel free to check the issues page or take a look at the contributing guide.
+## Contributing 🤝
 
-## 📝 License
-This project is licensed under the terms of the MIT license. See the LICENSE file for details.
+This project welcomes contributions, issues, and feature requests. Check out the issues page or refer to the contributing guide.
+
+## License 📝
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+---
+
+**Joiji is designed to be straightforward, accessible, and easy to set up. We hope you enjoy using our movie rental app! 🎥**
