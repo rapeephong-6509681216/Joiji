@@ -20,9 +20,9 @@ function Signup() {
         <div className='p-4'>
           <h1 className='text-neutral-600 font-bold text-4xl'>Sign Up</h1>
           <div className='mt-12 space-y-6'>
-            <input type='text' onChange={handleUsernameChange} placeholder='Username' className='w-80 h-16 outline outline-1 outline-stone-600 rounded-sm p-3 text-lg' required/>
-            <input type='password' onChange={handlePasswordChange} placeholder='Add a Password' className='w-80 h-16 outline outline-1 outline-stone-600 rounded-sm p-3 text-lg' required/>
-            <Link to={userInfo.username && userInfo.password ? "/Plan" : "#"} className='bg-red-netflix text-white font-medium text-lg rounded w-80 h-16 flex items-center justify-center active:bg-red-netflix-active'>Next</Link>
+            <input type='text' onChange={handleUsernameChange} placeholder='Username' className='w-full h-16 outline outline-1 outline-stone-600 rounded-sm p-3 text-lg' required/>
+            <input type='password' onChange={handlePasswordChange} placeholder='Add a Password' className='w-full h-16 outline outline-1 outline-stone-600 rounded-sm p-3 text-lg' required/>
+            <Link to={userInfo.username && userInfo.password ? "/Plan" : "#"} className='bg-red-netflix text-white font-medium text-lg rounded w-full h-16 flex items-center justify-center active:bg-red-netflix-active'>Next</Link>
           </div>
         </div>
       </div>
