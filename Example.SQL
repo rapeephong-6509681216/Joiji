@@ -21,48 +21,59 @@ VALUES (LAST_INSERT_ID(), 'manager1', 'password1', 'Jane', 'Smith', 1);
 
 INSERT INTO films (title, stock, outline, genre, avg_rating, film_queue, poster_path, staffID, username)
 VALUES
-('Avengers: Endgame', 100, 'The Avengers assemble once more to undo Thanos''s destruction and restore order to the universe.', 'Action', 8.4, 20, 'avenger-endgame-movie-poster.png', 12, 'manager1'),
+('Avengers: Endgame', 100, 'The Avengers assemble once more to undo Thanos''s destruction and restore order to the universe.', 'Action', 8.4, 20, 'avenger-endgame-movie-poster.png', 2, 'manager1'),
 
-('Barbie', 120, 'Follows Barbie on her adventures in a modern-day setting.', 'Family', 7.2, 10, 'barbie-movie-poster.png', 12, 'manager1'),
+('Barbie', 120, 'Follows Barbie on her adventures in a modern-day setting.', 'Family', 7.2, 10, 'barbie-movie-poster.png', 2, 'manager1'),
 
-('Dune: Part One', 80, 'A young nobleman leads a rebellion to fight for control of the desert planet Arrakis.', 'Sci-Fi', 7.9, 112, 'dune-movie-poster.png', 12, 'manager1'),
+('Dune: Part One', 80, 'A young nobleman leads a rebellion to fight for control of the desert planet Arrakis.', 'Sci-Fi', 7.9, 112, 'dune-movie-poster.png', 2, 'manager1'),
 
-('Hor Taew Tak The Finale', 30, 'Thai horror-comedy film about a group of friends encountering supernatural events.', 'Horror', 6.12, 12, 'hor-taew-tak-the-finale-movie-poster.png', 12, 'manager1'),
+('Hor Taew Tak The Finale', 30, 'Thai horror-comedy film about a group of friends encountering supernatural events.', 'Horror', 6.12, 12, 'hor-taew-tak-the-finale-movie-poster.png', 2, 'manager1'),
 
-('John Wick: Chapter 2', 70, 'Legendary hitman John Wick is forced back out of retirement by a former associate.', 'Action', 7.12, 12, 'john-wick-chapter-two-movie-poster.png', 12, 'manager1'),
+('John Wick: Chapter 2', 70, 'Legendary hitman John Wick is forced back out of retirement by a former associate.', 'Action', 7.12, 12, 'john-wick-chapter-two-movie-poster.png', 2, 'manager1'),
 
-('Jujutsu Kaisen', 60, 'A high school student becomes part of a secret organization battling curses.', 'Anime', 8.6, 18, 'jujutsu-kaisen-japanese-movie-poster.png', 12, 'manager1'),
+('Jujutsu Kaisen', 60, 'A high school student becomes part of a secret organization battling curses.', 'Anime', 8.6, 18, 'jujutsu-kaisen-japanese-movie-poster.png', 2, 'manager1'),
 
-('Oppenheimer', 40, 'Biographical drama about J. Robert Oppenheimer and the development of the atomic bomb.', 'Drama', 7.8, 8, 'oppenheimer-movie-poster.png', 12, 'manager1'),
+('Oppenheimer', 40, 'Biographical drama about J. Robert Oppenheimer and the development of the atomic bomb.', 'Drama', 7.8, 8, 'oppenheimer-movie-poster.png', 2, 'manager1'),
 
-('Spider-Man: Across the Spider-Verse', 90, 'Miles Morales navigates multiple dimensions as Spider-Man to stop a new threat.', 'Animation', 9.0, 212, 'spider-man-across-the-spider-verse-movie-poster.png', 12, 'manager1'),
+('Spider-Man: Across the Spider-Verse', 90, 'Miles Morales navigates multiple dimensions as Spider-Man to stop a new threat.', 'Animation', 9.0, 212, 'spider-man-across-the-spider-verse-movie-poster.png', 2, 'manager1'),
 
-('The Little Mermaid', 60, 'A mermaid princess makes a Faustian bargain with an unscrupulous sea-witch.', 'Fantasy', 7.4, 10, 'the-little-mermaid-movie-poster.png', 12, 'manager1'),
+('The Little Mermaid', 60, 'A mermaid princess makes a Faustian bargain with an unscrupulous sea-witch.', 'Fantasy', 7.4, 10, 'the-little-mermaid-movie-poster.png', 2, 'manager1'),
 
-('Fast X', 712, 'The next installment in the Fast & Furious series featuring high-speed action and daring stunts.', 'Action', 7.7, 112, 'fast-x-movie-poster.png', 12, 'manager1');
-
-INSERT INTO directors (filmID, director)
-VALUES
-(51, 'Anthony Russo, Joe Russo'),
-(52, 'Greta Gerwig'),
-(53, 'Denis Villeneuve'),
-(54, 'Poj Arnon'),
-(55, 'Chad Stahelski'),
-(56, 'Sunghoo Park'),
-(57, 'Christopher Nolan'),
-(58, 'Joaquim Dos Santos, Kemp Powers'),
-(59, 'Ron Clements, John Musker'),
-(60, 'Justin Lin');
+('Fast X', 712, 'The next installment in the Fast & Furious series featuring high-speed action and daring stunts.', 'Action', 7.7, 112, 'fast-x-movie-poster.png', 2, 'manager1');
 
 INSERT INTO directors (filmID, director)
 VALUES
-(51, 'Anthony Russo, Joe Russo'),
-(52, 'Greta Gerwig'),
-(53, 'Denis Villeneuve'),
-(54, 'Poj Arnon'),
-(55, 'Chad Stahelski'),
-(56, 'Sunghoo Park'),
-(57, 'Christopher Nolan'),
-(58, 'Joaquim Dos Santos, Kemp Powers'),
-(59, 'Ron Clements, John Musker'),
-(60, 'Justin Lin');
+(1, 'Anthony Russo'),
+(1, 'Joe Russo'),
+(2, 'Greta Gerwig'),
+(3, 'Denis Villeneuve'),
+(4, 'Poj Arnon'),
+(5, 'Chad Stahelski'),
+(6, 'Sunghoo Park'),
+(7, 'Christopher Nolan'),
+(8, 'Joaquim Dos Santos'),
+(8, 'Kemp Powers'),
+(9, 'Ron Clements'),
+(9, ' John Musker'),
+(10, 'Justin Lin');
+
+INSERT INTO stars (filmID, star)
+VALUES
+(1, 'Robert Downey Jr.'),
+(1, 'Chris Evans'),
+(1, 'Mark Ruffalo'),
+(1, 'Chris Hemsworth'),
+(2, 'Margot Robbie'),
+(2, 'Emma Stone'),
+(3, 'Timothee Chalamet'),
+(3, 'Zendaya'),
+(4, 'Pongsakorn Mettarikanon'),
+(4, 'Kohtee Aramboy'),
+(5, 'Keanu Reeves'),
+(6, 'Junya Enoki'),
+(6, 'Yuuma Uchida'),
+(7, 'Cillian Murphy'),
+(8, 'Shameik Moore'),
+(9, 'Halle Bailey'),
+(9, 'Javier Bardem'),
+(10, 'Vin Diesel');

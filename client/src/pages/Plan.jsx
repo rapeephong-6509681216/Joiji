@@ -3,10 +3,10 @@ import { UserContext } from '../components/UserContext'
 
 function Plan() {
     
-    const { userInfo, setUserInfo } = useContext(UserContext)
+  const user = sessionStorage.getItem('user');
 
   return (
-    <div>{`Hello ${userInfo.username} again!`}</div>
+    <div>{`Hello ${user} again!`}</div>
   )
 }
 

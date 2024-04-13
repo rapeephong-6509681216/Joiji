@@ -4,40 +4,21 @@ import { Link } from 'react-router-dom'
 
 function Home() {
   return (
-    <div className='bg-background-home w-screen h-screen bg-cover bg-center'>
-      <div className='p-5 flex justify-between flex-col md:flex-row'>
-        <img src={logo} alt='logo' className='w-32 sm:w-36' />
-        <div className='flex space-x-10 mr-10 mt-2'>
-          <Link to="/Sign in" className='bg-black-netflix px-10 text-white font-bold rounded flex items-center justify-center active:bg-black-netflix-active'>Sign In</Link>
-          <Link to="/Sign up" className='bg-red-netflix px-10 text-white font-bold rounded flex items-center justify-center active:bg-red-netflix-active'>Sign Up</Link>
+    <div className='bg-background-home bg-cover bg-center w-screen h-screen'>
+      <header className='p-8 px-12 m-auto flex justify-between'>
+        <img src={logo} alt='logo'className='w-32 md:w-36 lg:w-40 h-auto' />
+        <div className='space-x-6 flex justify-items-center'>
+          <Link to="/Sign in" className='bg-black-netflix px-6 py-2 md:px-10 md:py-3 lg:px-12 lg:py-4 text-white text-lg font-bold rounded active:bg-black-netflix-active'>Sign In</Link>
+          <Link to="/Sign up" className='bg-red-netflix px-6 py-2 md:px-10 md:py-3 lg:px-14 lg:py-4 text-white text-lg font-bold rounded active:bg-red-netflix-active'>Sign Up</Link>
         </div>
-      </div>
-      <div className='flex flex-col ml-5 mt-80'>
-        <h1 className='text-white text-6xl font-bold'>Movies Delivered</h1>
-        <h3 className='text-white text-2xl'>Right to your mailbox. Free shipping, no late fees.</h3>
-        <Link to="/Sign up" className='bg-red-netflix text-white font-medium text-lg rounded w-64 h-14 mt-4 flex items-center justify-center active:bg-red-netflix-active'>Sign Up</Link>
+      </header>
+      <div className='px-12 fixed top-1/2 space-y-3'>
+        <h1 className='text-white text-4xl md:text-5xl lg:text-6xl font-bold'>Movies Delivered</h1>
+        <h3 className='text-white text-lg md:text-xl lg:text-2xl'>Right to your mailbox. Free shipping, no late fees.</h3>
+        <Link to="/Sign up" className='relative top-8 bg-red-netflix px-16 py-3 md:px-24 md:py-4 lg:px-32 lg:py-5 text-white text-xl font-normal rounded active:bg-red-netflix-active'>Sign Up</Link>
       </div>
     </div>
   )
 }
-
-// function Home() {
-//   return (
-//     <div className='bg-background-home w-screen h-screen bg-cover bg-center'>
-//       <div className='p-5 flex justify-between'>
-//         <img src={logo} alt='logo' className='size-1/12' />
-//         <div className='flex space-x-10 mr-10 mt-2'>
-//           <Link to="/Sign in" className='bg-black-netflix px-10 text-white font-bold rounded flex items-center justify-center active:bg-black-netflix-active'>Sign In</Link>
-//           <Link to="/Sign up" className='bg-red-netflix px-10 text-white font-bold rounded flex items-center justify-center active:bg-red-netflix-active'>Sign Up</Link>
-//         </div>
-//       </div>
-//       <div className='flex flex-col ml-5 mt-80'>
-//         <h1 className='text-white text-6xl font-bold'>Movies Delivered</h1>
-//         <h3 className='text-white text-2xl'>Right to your mailbox. Free shipping, no late fees.</h3>
-//         <Link to="/Sign up" className='bg-red-netflix text-white font-medium text-lg rounded w-64 h-14 mt-4 flex items-center justify-center active:bg-red-netflix-active'>Sign Up</Link>
-//       </div>
-//     </div>
-//   )
-// }
 
 export default Home

@@ -15,11 +15,12 @@ const port = process.env.SERVER_PORT
 
 app.use(cors());
 
-// TEST 
-app.get('/movies', (req, res, next) => {
+app.get('/movies/:category/poster', (req, res) => {
+  const category = req.params.category;
+  if (category === 'All') {
     connection.query(
-      'SELECT * FROM `films`',
-      function (err, results, fields) {
+      'SELECT filmID, poster_path FROM films',
+      function (err, results) {
         if (err) {
           console.error('Error querying database:', err);
           res.status(500).send('Error querying database');
@@ -28,12 +29,40 @@ app.get('/movies', (req, res, next) => {
         res.json(results);
       }
     );
+  } else if (category === 'Top10') {
+    connection.query(
+      'SELECT filmID, poster_path FROM films ORDER BY Avg_rating DESC LIMIT 10',
+      function (err, results) {
+        if (err) {
+          console.error('Error querying database:', err);
+          res.status(500).send('Error querying database');
+          return;
+        }
+        res.json(results);
+      }
+    );
+  } else {
+    connection.query(
+      'SELECT filmID, poster_path FROM films WHERE genre = ?',
+      [category],
+      function (err, results) {
+        if (err) {
+          console.error('Error querying database:', err);
+          res.status(500).send('Error querying database');
+          return;
+        }
+        res.json(results);
+      }
+    );
+  }
 });
-  
-app.get('/movies/top10', (req, res, next) => {
+
+app.get('/movies/poster/search/:searchInput', (req, res) => {
+  const search = req.params.searchInput;
   connection.query(
-    'SELECT * FROM films ORDER BY Avg_rating DESC LIMIT 10',
-    function (err, results, fields) {
+    'SELECT filmID, poster_path FROM films WHERE title LIKE ?',
+    ['%' + search + '%'],
+    function (err, results) {
       if (err) {
         console.error('Error querying database:', err);
         res.status(500).send('Error querying database');
@@ -44,44 +73,12 @@ app.get('/movies/top10', (req, res, next) => {
   );
 });
 
-app.get('/movies/:id/director', (req, res, next) => {
-  const movieId = req.params.id;
+app.get('/movies/:filmID', (req, res) => {
+  const filmID = req.params.filmID;
   connection.query(
-      'SELECT d.director FROM films f JOIN directors d ON f.filmID = d.filmID WHERE f.filmID = ?',
-      [movieId],
-      function (err, results, fields) {
-          if (err) {
-              console.error('Error querying database:', err);
-              res.status(500).send('Error querying database');
-              return;
-          }
-          res.json(results);
-      }
-  );
-});
-
-app.get('/movies/:id/star', (req, res, next) => {
-  const movieId = req.params.id;
-  connection.query(
-      'SELECT s.star FROM films f JOIN stars s ON f.filmId = s.filmID WHERE f.filmID = ?',
-      [movieId],
-      function (err, results, fields) {
-          if (err) {
-              console.error('Error querying database:', err);
-              res.status(500).send('Error querying database');
-              return;
-          }
-          res.json(results);
-      }
-  );
-});
-
-app.get('/movies/search/:title', (req, res, next) => {
-  const MovieTitle = req.params.title;
-  connection.query(
-    'SELECT * FROM films WHERE title LIKE ?',
-    [`%${MovieTitle}%`],
-    function (err, results, fields) {
+    'SELECT * FROM films WHERE filmID = ?',
+    [filmID],
+    function (err, results) {
       if (err) {
         console.error('Error querying database:', err);
         res.status(500).send('Error querying database');
@@ -89,8 +86,40 @@ app.get('/movies/search/:title', (req, res, next) => {
       }
       res.json(results);
     }
-  )
-})
+  );
+});
+
+app.get('/movies/:filmID/director', (req, res) => {
+  const filmID = req.params.filmID;
+  connection.query(
+    'SELECT director FROM directors WHERE filmID = ?',
+    [filmID],
+    function (err, results) {
+      if (err) {
+        console.error('Error querying database:', err);
+        res.status(500).send('Error querying database');
+        return;
+      }
+      res.json(results);
+    }
+  );
+});
+
+app.get('/movies/:filmID/star', (req, res) => {
+  const filmID = req.params.filmID;
+  connection.query(
+    'SELECT star FROM stars WHERE filmID = ?',
+    [filmID],
+    function (err, results) {
+      if (err) {
+        console.error('Error querying database:', err);
+        res.status(500).send('Error querying database');
+        return;
+      }
+      res.json(results);
+    }
+  );
+});
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
