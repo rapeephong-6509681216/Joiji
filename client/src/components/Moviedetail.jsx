@@ -1,9 +1,43 @@
 import React, { useEffect, useState } from 'react'
+import Swal from 'sweetalert2'
 
 function Moviedetail( { filmID, onClose }) {
     const [movie, setMovie] = useState({})
     const [director, setDirector] = useState([])
     const [star, setStar] = useState([])
+    const user = sessionStorage.getItem('user')
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        fetch(`${import.meta.env.VITE_API_URL}/${user}/queue`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                user: user,
+                filmID: filmID
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                Swal.fire({
+                    title: "Success!",
+                    text: `${movie.title} has been added to your queue!`,
+                    icon: "success",
+                  });
+            } else if(response.status === 400) {
+                response.text().then(error => {
+                    Swal.fire({
+                        title: "Oops!",
+                        text: `${error}`,
+                        icon: "error",
+                    });
+                });
+            }
+        
+        })
+    }
 
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URL}/movies/${filmID}`)
@@ -29,131 +63,56 @@ function Moviedetail( { filmID, onClose }) {
     }, [filmID]);
 
     return (
-        // Not Done
         <div className='z-50 fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center' onClick={onClose}>
-            <div className='container bg-white w-[900px] h-[600px]' onClick={e => e.stopPropagation()}>
+            <div className='container mx-auto bg-white max-w-screen-lg' onClick={e => e.stopPropagation()}>
                 <header className='flex justify-end bg-stone-100 bg-opacity-20 w-full h-16 border border-stone-300'>
                     <button className='text-black text-6xl font-light mr-3' onClick={onClose} >&times;</button>
                 </header>
-                <div className='flex justify-between mt-10 mr-16 ml-8 h-full'>
-                    <div className='w-3/5'>
-                        <h3 className='font-medium text-3xl'>{movie.title}</h3>
-                        <div className='container mt-4'>
-                            <p className='text-warp font-normal text-lg h-36'>{movie.outline}</p>
-                        </div>
-                        <div className='container '>
-                        <p className='font-medium mt-8 text-lg'>
-                                 Director:
-                                 <span className='font-normal'>
-                                 {director.map((d, index) => (
+                <div className='container flex flex-row w-full '>
+                    <div className='flex-grow p-8'>
+                        <h1 className='text-3xl font-medium'>{movie.title}</h1>
+                        <p className='mt-5 mb-8 h-[150px]'>
+                            <span className='text-warp font-normal text-lg h-36'>
+                                {movie.outline}
+                            </span>
+                        </p>
+                        <p className='font-medium text-lg'>
+                            Director:
+                            <span className='font-normal'>
+                                {director.map((d, index) => (
                                     <span key={index}> {d.director}{index < director.length - 1 ? ', ' : ''}</span>
                                 ))}
-                                </span>
-                            </p>
-                            <p className='font-medium text-lg'>
-                                Star:
-                                <span className='font-normal'>
-                                    {star.map((s, index) => (
+                            </span>
+                        </p>
+                        <p className='font-medium text-lg'>
+                            Star:
+                            <span className='font-normal'>
+                                {star.map((s, index) => (
                                     <span key={index}> {s.star}{index < star.length - 1 ? ', ' : ''}</span>
-                                    ))}
-                                </span>
-                            </p>
-                            <p className='font-medium text-lg'>
-                                Genre:{" "}
-                                <span className='font-normal'>
-                                    {movie.genre}
-                                </span>
-                            </p>
-                            <p className='font-medium text-lg'>
-                                Stock:{" "}
-                                <span className='font-normal'>
-                                    {movie.stock}
-                                </span>
-                            </p>
-                        </div>
-                        <button className='bg-red-netflix mt-12 py-5 px-28 text-white font-normal text-xl rounded flex items-center justify-center active:bg-red-netflix-active'>+ Add to Queue</button>
+                                ))}
+                            </span>
+                        </p>
+                        <p className='font-medium text-lg'>
+                            Genre:
+                            <span className='font-normal'>
+                                {movie.genre}
+                            </span>
+                        </p>
+                        <p className='font-medium text-lg'>
+                            Stock:
+                            <span className='font-normal'>
+                                {movie.stock}
+                            </span>
+                        </p>
+                        <button type='submit' onClick={handleSubmit} className='bg-red-netflix mt-12 py-5 px-28 text-white font-normal text-xl rounded flex items-center justify-center active:bg-red-netflix-active'>+ Add to Queue</button>
                     </div>
-                    <div className=''>
-                        <img src={import.meta.env.VITE_PATH_POSTER + movie.poster_path} alt={movie.title} className='h-[300px] w-[200px]'/>
+                    <div className='m-8 pr-8'>
+                        <img src={import.meta.env.VITE_PATH_POSTER + movie.poster_path} alt={movie.title} className='"object-cover object-center w-64 h-auto'/>
                     </div>
                 </div>
-
             </div>
         </div>
     )
-  
-//     const [director, setDirector] = useState([])
-//     const [star, setStar] = useState([])
-
-//     useEffect(() => {
-//         fetch(`${import.meta.env.VITE_API_URL}/movies/${movie.filmID}/director`)
-//             .then(response => response.json())
-//             .then(data => {
-//                 setDirector(data)
-//             })
-//             .catch(error => console.error('Error:', error));
-
-//         fetch(`${import.meta.env.VITE_API_URL}/movies/${movie.filmID}/star`)
-//             .then(response => response.json())
-//             .then(data => {
-//                 setStar(data)
-//             })
-//             .catch(error => console.error('Error:', error));
-//     }, [movie]);
-
-//   return (
-//     <div className='z-50 fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center' onClick={onClose}>
-//         <div className='box-content'>
-//             <div className='bg-white w-[900px] h-[600px]' onClick={e => e.stopPropagation()}>
-//                 <div className='bg-stone-100 bg-opacity-20 w-full h-16 outline outline-1 outline-stone-300'>
-//                     <div className='flex justify-end'>
-//                         <button className='text-black text-6xl font-light mr-5' onClick={onClose} >&times;</button>
-//                     </div> 
-//                 </div>
-//                 <div className='flex flex between p-12 pt-6'>
-//                     <div>
-//                         <h3 className='font-medium text-3xl'>{movie.title}</h3>
-//                         <div className='mt-4 mr-[100px]'>
-//                             <p className='text-warp font-normal text-lg'>{movie.outline}</p>
-//                             <p className='font-medium mt-8 text-lg'>
-//                                 Director:
-//                                 <span className='font-normal'>
-//                                 {director.map((d, index) => (
-//                                     <span key={index}> {d.director}{index < director.length - 1 ? ', ' : ''}</span>
-//                                 ))}
-//                                 </span>
-//                             </p>
-//                             <p className='font-medium text-lg'>
-//                                 Star:
-//                                 <span className='font-normal'>
-//                                     {star.map((s, index) => (
-//                                     <span key={index}> {s.star}{index < star.length - 1 ? ', ' : ''}</span>
-//                                     ))}
-//                                 </span>
-//                             </p>
-//                             <p className='font-medium text-lg'>
-//                                 Genre:
-//                                 <span className='font-normal'>
-//                                     <span > {movie.genre}</span>
-//                                 </span>
-//                             </p>
-//                             <p className='font-medium text-lg'>
-//                                 Stock:
-//                                 <span className='font-normal'>
-//                                     <span > {movie.stock}</span>
-//                                 </span>
-//                             </p>
-//                         </div>
-//                         <button className='bg-red-netflix mt-12 py-5 px-28 text-white font-normal text-xl rounded flex items-center justify-center active:bg-red-netflix-active'>+ Add to Queue</button>
-//                     </div>
-//                     <div>
-//                         <img src={import.meta.env.VITE_PATH_POSTER + movie.poster_path} alt={movie.title} className='object-scale-down object-cover h-[400px] w-[800px]'/>
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
-//     </div>
-//   )
 }
 
 export default Moviedetail
