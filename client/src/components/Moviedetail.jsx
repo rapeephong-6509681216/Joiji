@@ -26,6 +26,13 @@ function Moviedetail( { filmID, onClose }) {
                     text: `${movie.title} has been added to your queue!`,
                     icon: "success",
                   });
+
+                fetch(`${import.meta.env.VITE_API_URL}/${filmID}/stock`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
             } else if(response.status === 400) {
                 response.text().then(error => {
                     Swal.fire({
@@ -68,8 +75,8 @@ function Moviedetail( { filmID, onClose }) {
                 <header className='flex justify-end bg-stone-100 bg-opacity-20 w-full h-16 border border-stone-300'>
                     <button className='text-black text-6xl font-light mr-3' onClick={onClose} >&times;</button>
                 </header>
-                <div className='container flex flex-row w-full '>
-                    <div className='flex-grow p-8'>
+                <div className='container flex flex-row w-full'>
+                    <div className='flex-grow p-8 max-w-xl'>
                         <h1 className='text-3xl font-medium'>{movie.title}</h1>
                         <p className='mt-5 mb-8 h-[150px]'>
                             <span className='text-warp font-normal text-lg h-36'>
@@ -93,21 +100,21 @@ function Moviedetail( { filmID, onClose }) {
                             </span>
                         </p>
                         <p className='font-medium text-lg'>
-                            Genre:
+                            Genre:{" "}
                             <span className='font-normal'>
                                 {movie.genre}
                             </span>
                         </p>
                         <p className='font-medium text-lg'>
-                            Stock:
+                            Stock:{" "}
                             <span className='font-normal'>
                                 {movie.stock}
                             </span>
                         </p>
                         <button type='submit' onClick={handleSubmit} className='bg-red-netflix mt-12 py-5 px-28 text-white font-normal text-xl rounded flex items-center justify-center active:bg-red-netflix-active'>+ Add to Queue</button>
                     </div>
-                    <div className='m-8 pr-8'>
-                        <img src={import.meta.env.VITE_PATH_POSTER + movie.poster_path} alt={movie.title} className='"object-cover object-center w-64 h-auto'/>
+                    <div className='m-8 pl-20'>
+                        <img src={import.meta.env.VITE_PATH_POSTER + movie.poster_path} alt={movie.title} className='"object-cover object-center w-64 h-auto shadow-lg outline outline-1 outline-slate-100'/>
                     </div>
                 </div>
             </div>

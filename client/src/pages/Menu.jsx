@@ -4,7 +4,6 @@ import Menubar from '../components/Menubar'
 import { motion } from 'framer-motion'
 import Moviedetail from '../components/Moviedetail'
 
-//test
 function Menu() {
 
   const [genre, setGenre] = useState('All')

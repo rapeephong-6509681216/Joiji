@@ -126,47 +126,66 @@ app.post('/:user/queue', (req, res) => {
   const user = req.params.user;
   const filmID = req.body.filmID;
   let current_user_queue;
+  let current_film_stock;
 
   connection.query(
-    'SELECT COUNT(*) as user_Queue FROM orders WHERE username = ?',
-    [user],
+    'SELECT stock FROM films WHERE filmID = ?',
+    [filmID],
     function (err, results) {
       if (err) {
         console.error('Error querying database:', err);
         res.status(500).send('Error querying database');
         return;
       }
-      current_user_queue = results[0].user_Queue;
-      if (current_user_queue >= 5) {
-        res.status(400).send('User has reached the maximum number of movies in queue');
+      current_film_stock = results[0].stock;
+
+      if (current_film_stock <= 0) {
+        res.status(400).send('This movie is out of stock');
         return;
       }
-
       connection.query(
-        'SELECT * FROM orders WHERE username = ? AND filmID = ?',
-        [user, filmID],
+        'SELECT COUNT(*) as user_Queue FROM orders WHERE username = ?',
+        [user],
         function (err, results) {
           if (err) {
             console.error('Error querying database:', err);
             res.status(500).send('Error querying database');
             return;
           }
+          current_user_queue = results[0].user_Queue;
 
-          if (results.length > 0) {
-            res.status(400).send('This movie is already in the queue');
+          if (current_user_queue >= 5) {
+            res.status(400).send('You has reached the maximum number of movies in queue.');
             return;
           }
 
           connection.query(
-            'INSERT INTO orders (user_Queue, order_Status, rentDate, returnDate, username, filmID) VALUES (?, ?, ?, ?, ?, ?)',
-            [current_user_queue + 1, 'Booking', new Date(), null, user, filmID],
+            'SELECT * FROM orders WHERE username = ? AND filmID = ?',
+            [user, filmID],
             function (err, results) {
               if (err) {
                 console.error('Error querying database:', err);
                 res.status(500).send('Error querying database');
                 return;
               }
-              res.status(201).send('Movie added to queue');
+
+              if (results.length > 0) {
+                res.status(400).send('This movie is already in your queue.');
+                return;
+              }
+
+              connection.query(
+                'INSERT INTO orders (user_Queue, order_Status, rentDate, returnDate, username, filmID) VALUES (?, ?, ?, ?, ?, ?)',
+                [current_user_queue + 1, 'Booking', new Date(), null, user, filmID],
+                function (err, results) {
+                  if (err) {
+                    console.error('Error querying database:', err);
+                    res.status(500).send('Error querying database');
+                    return;
+                  }
+                  res.status(201).send('Movie added to queue.');
+                }
+              );
             }
           );
         }
@@ -175,6 +194,45 @@ app.post('/:user/queue', (req, res) => {
   );
 });
 
+app.put('/:filmID/stock', (req, res) => {
+  const filmID = req.params.filmID;
+
+  connection.query(
+    'UPDATE films SET stock = stock - 1 WHERE filmID = ?',
+    [filmID],
+    function (err, results) {
+      if (err) {
+        console.error('Error querying database:', err);
+        res.status(500).send('Error querying database');
+        return;
+      }
+      res.status(200).send('Stock updated');
+    }
+  )
+})
+
+app.post('/user', (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  connection.query(
+    'SELECT password FROM users WHERE username = ?',
+    [username],
+    function (err, results) {
+      if (err) {
+        console.error('Error querying database:', err);
+        res.status(500).send('Error querying database');
+        return;
+      }
+      if (results.length <= 0 || results[0].password !== password) {
+        res.status(400).send('Incorrect username or password.');
+        return;
+      }
+
+      res.status(200).send('User logged in');
+    }
+  );
+});
 
 //  let quota;
 
@@ -214,20 +272,6 @@ app.post('/:user/queue', (req, res) => {
 //   );
 
 // });
-
-app.get('/user', (req, res) => {
-  connection.query(
-    'SELECT * FROM users',
-    function (err, results) {
-      if (err) {
-        console.error('Error querying database:', err);
-        res.status(500).send('Error querying database');
-        return;
-      }
-      res.json(results);
-    }
-  );
-});
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

@@ -1,10 +1,9 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { UserContext } from '../components/UserContext'
 
-function Signup() {
+function SignUp() {
 
-  const { userInfo, setUserInfo } = useContext(UserContext);
+  const [userInfo, setUserInfo] = useState({ username: '', password: '' });
   const navigate = useNavigate();
 
   const handleUsernameChange = (e) => {
@@ -37,4 +36,4 @@ function Signup() {
   )
 }
 
-export default Signup
+export default SignUp

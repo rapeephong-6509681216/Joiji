@@ -12,7 +12,7 @@ CREATE TABLE users (
 
 CREATE TABLE subscription (
     username VARCHAR(20),
-    subId VARCHAR(5),
+    subId INT,
     startDate DATE,
     endDate DATE,
     quota INT,
