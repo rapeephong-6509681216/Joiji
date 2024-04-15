@@ -4,6 +4,7 @@ import SignUp from "./pages/SignUp";
 import Plan from "./pages/Plan";
 import Menu from "./pages/Menu";
 import SignIn from "./pages/SignIn";
+import Admin from "./pages/Admin";
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
           <Route path='/Sign up' element={<SignUp />} />
           <Route path='/Plan' element={<Plan />} />
           <Route path='/Menu' element={<Menu />} />
+          <Route path='/Admin' element={<Admin />} />
         </Routes>
     </BrowserRouter>
   )

@@ -234,6 +234,29 @@ app.post('/user', (req, res) => {
   );
 });
 
+app.post('/staff', (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  connection.query(
+    'SELECT password FROM staffs WHERE username = ?',
+    [username],
+    function (err, results) {
+      if (err) {
+        console.error('Error querying database:', err);
+        res.status(500).send('Error querying database');
+        return;
+      }
+      if (results.length <= 0 || results[0].password !== password) {
+        res.status(400).send('Incorrect username or password.');
+        return;
+      }
+
+      res.status(200).send('User logged in');
+    }
+  );
+});
+
 //  let quota;
 
 // connection.query(
