@@ -18,8 +18,9 @@ function UserForm({ setUserInfo, setStep }) {
 
       
   return (
-      <div className='bg-white shadow-lg shadow-slate-200 outline outline-1 outline-gray-300 rounded-sm p-8 w-96'>
+      <div className='relative bg-white shadow-lg shadow-slate-200 outline outline-1 outline-gray-300 rounded-sm p-8 w-96'>
         <h1 className='text-neutral-600 font-bold text-4xl'>Sign Up</h1>
+        <span className='absolute top-0 right-0 pr-5 pt-3 text-neutral-600'>Step 1 of 3</span>
         <form className='mt-12 space-y-6' onSubmit={handleSubmit}>
           <input type='text' onChange={handleUsernameChange} placeholder='Username' className='w-full h-16 outline outline-1 outline-stone-600 rounded-sm p-3 text-lg' required/>
           <input type='password' onChange={handlePasswordChange} placeholder='Add a Password' className='w-full h-16 outline outline-1 outline-stone-600 rounded-sm p-3 text-lg' required/>

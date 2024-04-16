@@ -16,7 +16,7 @@ function SubscriptionForm( {setSubscription, setStep} ) {
     
     const form = ( num, isSelect) => (
         <div className='space-y-3'>
-            <span className={`font-normal text-2xl text-center block ${isSelect ? 'text-red-netflix' : 'text-stone-700'}`}>{type[num]}</span> :
+            <span className={`font-normal text-2xl text-center block ${isSelect ? 'text-red-netflix' : 'text-stone-700'}`}>{type[num]}</span>
             <div onClick={() => {setSelected(num == 0 ? 0 : 1)}} 
                     className={`bg-white shadow-lg shadow-slate-200 rounded-sm p-8 w-96 text-center flex flex-col cursor-pointer ${isSelect ? 'border-2 border-red-netflix border-t-[20px]' : 'border-2 border-transparent border-t-[20px]'}`}>
                 <div className='flex flex-col space-y-5 border-b border-neutral-300 text-stone-700 font-normal'>
@@ -45,7 +45,7 @@ function SubscriptionForm( {setSubscription, setStep} ) {
 
   return (
     <div>
-        <h1 className='absolute inset-x-0 top-16 h-16 text-center font-bold text-3xl text-stone-700'>Choose a plan</h1>
+        <h1 className='inset-x-0 top-full h-full text-center font-bold text-3xl text-stone-700'>Choose a plan</h1>
         <div className='flex flex-row space-x-8 mt-20'>
             {selected === 0 ? form(0, 1) : form(0, 0) }
             {selected === 1 ? form(1, 1) : form(1, 0) }

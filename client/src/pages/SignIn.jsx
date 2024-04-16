@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
+import logo from '../assets/logo.png'
 
 function SignIn() {
 
@@ -45,6 +46,9 @@ function SignIn() {
     
     return (
       <div className='bg-gray-100 flex items-center justify-center h-screen'>
+        <Link to='/'>
+          <img src={logo} alt='logo'className='absolute left-8 top-8 w-32 md:w-36 lg:w-40 h-auto' />
+        </Link>
         <div className='bg-white shadow-lg shadow-slate-200 outline outline-1 outline-gray-300 rounded-sm p-8 w-96'>
           <h1 className='text-neutral-600 font-bold text-4xl'>Sign In</h1>
           <form className='mt-12 space-y-6' onSubmit={handleSubmit}>
