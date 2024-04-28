@@ -52,7 +52,7 @@ function Menu() {
             key={genre + poster.filmID} 
             src={import.meta.env.VITE_PATH_POSTER + poster.poster_path} 
             alt={poster.filmID} 
-            className='w-64 h-96 cursor-pointer'
+            className='w-64 h-96 cursor-pointer object-cover'
             initial={{ opacity: 0, scale: 0.9}}
             animate={{ opacity: 1, scale: 1 }}
             whileHover={{ scale: 1.1 }}
