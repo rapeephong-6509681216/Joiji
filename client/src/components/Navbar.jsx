@@ -19,7 +19,7 @@ function Navbar( { setSearchMovie } ) {
       <div className='space-x-6 flex justify-items-center'>
         <Link to="/Queue" className={`mt-5 mb-5 text-white text-lg font-medium hover:underline ${location.pathname === "/Queue" ? "underline" : ""}`}>QUEUE</Link>
         <img src={avatar} alt='User avatar' className='w-12 h-12 sm:w-auto sm:h-auto' />
-        <div className='mt-5 mb-5 text-white text-lg text-nowrap font-medium'>{user || "Guest"}</div>
+        <Link to="/EditAddressForm" className={`mt-5 mb-5 text-white text-lg text-nowrap font-medium hover:underline ${location.pathname === "/EditAddressForm" ? "underline" : ""}`}>{user}</Link>
       </div>
     </nav>
   )

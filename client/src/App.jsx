@@ -5,6 +5,8 @@ import Plan from "./pages/Plan";
 import Menu from "./pages/Menu";
 import SignIn from "./pages/SignIn";
 import Admin from "./pages/Admin";
+import AddressForm from "./components/AddressForm";
+import EditAddressForm from "./pages/EditAddressForm";
 
 function App() {
 
@@ -17,6 +19,8 @@ function App() {
           <Route path='/Plan' element={<Plan />} />
           <Route path='/Menu' element={<Menu />} />
           <Route path='/Admin' element={<Admin />} />
+          <Route path='/AddressForm' element={<AddressForm />} />
+          <Route path='/EditAddressForm' element={<EditAddressForm />} />
         </Routes>
     </BrowserRouter>
   )

@@ -5,6 +5,7 @@ import UserForm from '../components/UserForm';
 import SubscriptionForm from '../components/SubscriptionForm';
 import AddressForm from '../components/AddressForm';
 import { motion, AnimatePresence } from 'framer-motion';
+import Swal from 'sweetalert2'
 
 function SignUp() {
 
@@ -16,13 +17,15 @@ function SignUp() {
     phone: '',
     addressLine: '',
     city: '',
+    zipcode: '',
+    country: '',
   });
 
   const [subscription, setSubscription] = useState({
     username: userInfo.username,
-    quota: '',
+    quota: 0,
     subType: '',
-    price: '',
+    price: 0.00,
   });
 
   const [step, setStep] = useState(1);
@@ -34,6 +37,51 @@ function SignUp() {
     visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: "easeInOut" } },
     exit: { opacity: 0, x: '-10vw', transition: { duration: 0.5, ease: "easeInOut" } },
   }
+
+  useEffect(() => {
+    if (step === 4) {
+      fetch(`${import.meta.env.VITE_API_URL}/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userInfo: userInfo,
+          subscriptionInfo: subscription
+        })
+      })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        sessionStorage.setItem("user", `${userInfo.username}`);
+        Swal.fire({
+          title: "Success!",
+          text: data.message,
+          icon: "success",
+        }).then(function() {
+          navigate('/Menu');
+        })
+      } else {
+        Swal.fire({
+          title: "Something Wrong!",
+          text: data.message,
+          icon: "error",
+        }).then(function() {
+          navigate('/');
+        })
+      }
+    })
+    .catch(error => {
+      Swal.fire({
+        title: "Something Wrong!",
+        text: error.message,
+        icon: "error",
+      }).then(function() {
+        navigate('/');
+      })
+    })
+  }
+}, [step])
   
   return (
     <div className='bg-gray-100 flex items-center justify-center h-screen'>

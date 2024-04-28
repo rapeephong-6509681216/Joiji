@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
+const bodyParser = require('body-parser'); // TAE
 require('dotenv').config()
 
 const connection = mysql.createConnection({
@@ -256,6 +257,86 @@ app.post('/staff', (req, res) => {
     }
   );
 });
+
+// TAE
+app.put('/update', (req, res) => {
+  const username = req.body.username;
+  const addressLine = req.body.addressLine;
+  const city = req.body.city;
+  const country = req.body.country;
+  const zipcode = req.body.zipcode;
+  const phone = req.body.phone;
+  
+
+  connection.query(
+    "UPDATE users SET addressLine = ?, city = ?, zipcode = ?, country = ?, phone = ? WHERE username = ? ", 
+    [addressLine, city, zipcode, country, phone, username],
+    (err, result) => {
+      if (err) {
+        console.error('Error updating address:', err);
+        res.status(500).send("Error updating address");
+      } else {
+        console.log("Address updated successfully");
+        res.status(200).send("Address updated successfully");
+      }
+    }
+  );
+});
+
+app.post('/create',(req, res) => {
+  const first_name = req.body.first_name;
+  const last_name = req.body.last_name;
+  const addressLine = req.body.addressLine;
+  const city = req.body.city;
+  const country = req.body.country;
+  const zipcode = req.body.zipcode;
+  const phone = req.body.phone;
+
+  connection.query(
+      "INSERT INTO users (first_name,last_name,addressLine,city,zipcode,country,phone) VALUES(?,?,?,?,?,?,?)", 
+      [first_name, last_name, addressLine, city, zipcode,country, phone],
+      (err,result) => {
+          if(err){
+              console.log(err)
+          }else{
+              res.send("Values inserted");
+          }
+      }
+  );
+})
+
+app.post('/register', (req, res) => {
+  const userInfo = req.body.userInfo;
+  const subscription = req.body.subscriptionInfo;
+
+  connection.query(
+    `INSERT INTO users (username, password, first_name, last_name, phone, addressLine, city, country, zipcode)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+    [userInfo.username, userInfo.password, userInfo.first_name, userInfo.last_name, userInfo.phone,
+    userInfo.addressLine, userInfo.city, userInfo.country, userInfo.zipcode],
+    function (err, result) {
+      if (err) {
+        console.error('Error querying database:', err);
+        return res.status(500).json({ success: false, message: "Register Failed" });
+      }
+
+      connection.query(
+        `INSERT INTO subscription (username, startDate, endDate, quota, subType, price)
+        VALUES (?, CURDATE(),DATE_ADD(CURDATE(), INTERVAL 1 MONTH), ?, ?, ?);`,
+        [userInfo.username, subscription.quota, subscription.subType, subscription.price],
+        function (err, result) {
+          if (err) {
+            console.error('Error querying database:', err);
+            return res.status(500).json({ success: false, message: "Register Failed" });
+          }
+          
+          return res.status(200).json({ success: true, message: "Register Success" });
+        }
+      );
+    }
+  );
+});
+// TAE
 
 //  let quota;
 

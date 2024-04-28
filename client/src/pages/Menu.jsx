@@ -10,7 +10,6 @@ function Menu() {
   const [poster, setPoster] = useState([])
   const [searchMovie, setSearchMovie] = useState('');
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const [error, setError] = useState(null);
   const isFirstRender = useRef(true);
 
   useEffect(() => {
@@ -25,10 +24,7 @@ function Menu() {
       .then(movieData => {
         setPoster(movieData)
       })
-      .catch(error => {
-        console.error('Error:', error);
-        setError('Failed to fetch movie data');
-      });
+      .catch(error => console.error('Error:', error));
   }, [searchMovie]);
 
   useEffect(() => {
@@ -42,11 +38,8 @@ function Menu() {
       .then(movieData => {
         setPoster(movieData)
       })
-      .catch(error => {
-        console.error('Error:', error);
-        setError('Failed to fetch movie data');
-      });
-  }, [genre]); 
+      .catch(error => console.error('Error:', error));
+  }, [genre]);
 
   return (
     <div>
@@ -59,7 +52,7 @@ function Menu() {
             key={genre + poster.filmID} 
             src={import.meta.env.VITE_PATH_POSTER + poster.poster_path} 
             alt={poster.filmID} 
-            className='w-64 h-96 cursor-pointer object-cover'
+            className='w-64 h-96 cursor-pointer'
             initial={{ opacity: 0, scale: 0.9}}
             animate={{ opacity: 1, scale: 1 }}
             whileHover={{ scale: 1.1 }}
@@ -68,7 +61,6 @@ function Menu() {
           />
         ))}
       </div>
-      {error && <div className="text-red-500">{error}</div>}
       {selectedMovie && <Moviedetail filmID={selectedMovie} onClose={() => setSelectedMovie(null)} />}
     </div>
   )
