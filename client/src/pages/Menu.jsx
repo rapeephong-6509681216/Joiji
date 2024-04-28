@@ -10,6 +10,7 @@ function Menu() {
   const [poster, setPoster] = useState([])
   const [searchMovie, setSearchMovie] = useState('');
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const [error, setError] = useState(null);
   const isFirstRender = useRef(true);
 
   useEffect(() => {
@@ -24,7 +25,10 @@ function Menu() {
       .then(movieData => {
         setPoster(movieData)
       })
-      .catch(error => console.error('Error:', error));
+      .catch(error => {
+        console.error('Error:', error);
+        setError('Failed to fetch movie data');
+      });
   }, [searchMovie]);
 
   useEffect(() => {
@@ -38,7 +42,10 @@ function Menu() {
       .then(movieData => {
         setPoster(movieData)
       })
-      .catch(error => console.error('Error:', error));
+      .catch(error => {
+        console.error('Error:', error);
+        setError('Failed to fetch movie data');
+      });
   }, [genre]); 
 
   return (
@@ -61,6 +68,7 @@ function Menu() {
           />
         ))}
       </div>
+      {error && <div className="text-red-500">{error}</div>}
       {selectedMovie && <Moviedetail filmID={selectedMovie} onClose={() => setSelectedMovie(null)} />}
     </div>
   )

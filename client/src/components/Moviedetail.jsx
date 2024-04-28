@@ -71,11 +71,11 @@ function Moviedetail( { filmID, onClose }) {
 
     return (
         <div className='z-50 fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center' onClick={onClose}>
-            <div className='container mx-auto bg-white max-w-screen-lg' onClick={e => e.stopPropagation()}>
+            <div className='container mx-auto bg-white max-w-screen-lg rounded-lg overflow-hidden' onClick={e => e.stopPropagation()}>
                 <header className='flex justify-end bg-stone-100 bg-opacity-20 w-full h-16 border border-stone-300'>
-                    <button className='text-black text-6xl font-light mr-3' onClick={onClose} >&times;</button>
+                    <button className='text-black text-6xl font-light mr-3' onClick={onClose} aria-label="Close">&times;</button>
                 </header>
-                <div className='container flex flex-row w-full'>
+                <div className='container flex flex-col md:flex-row w-full'>
                     <div className='flex-grow p-8 max-w-xl'>
                         <h1 className='text-3xl font-medium'>{movie.title}</h1>
                         <p className='mt-5 mb-8 h-[150px]'>
