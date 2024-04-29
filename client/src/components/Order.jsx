@@ -27,7 +27,7 @@ function Order() {
                 setOrders(usersData);
             })
             .catch(error => console.error('Error:', error));
-    }, []);
+    });
 
     orders && orders.forEach(quota => {
         userQuota[quota.username] = quota.quota;
