@@ -459,6 +459,58 @@ app.get('/orders/shipped/:user', (req, res) =>{
 
 // Phreuk
 
+// FIRST
+app.get('/orders/history', (req, res) => {
+  const filmID = req.params.filmID;
+  connection.query(
+    'SELECT f.title,o.username,o.rating,o.returnDate,o.orderID,o.filmID FROM orders as o JOIN films AS f ON o.filmID = f.filmID JOIN users AS u ON o.username = u.username WHERE order_Status = "Returned" ',
+    [filmID],
+    function (err, results) {
+      if (err) {
+        console.error('Error querying database:', err);
+        res.status(500).send('Error querying database');
+        return;
+      }
+      res.json(results);
+    }
+  );
+});
+
+app.patch('/orders/history/rating/:orderID', (req, res) => {
+  const orderID = req.params.orderID;
+  const { newRating } = req.body;
+  connection.query(
+    'UPDATE orders SET rating = ? WHERE orderID = ?',
+    [newRating, orderID],
+    function(err, results) {
+      if (err) {
+        console.error('Error querying database:', err);
+        res.status(500).send('Error querying database');
+        return;
+      }
+      res.json(results);
+    }
+  );
+});
+
+app.patch('/orders/history/avgrating/:filmID', (req, res) => {
+  const filmID = req.params.filmID;
+  connection.query(
+    'UPDATE films SET avg_rating = (SELECT AVG(rating) FROM orders WHERE order_Status = "Returned" AND filmID = ?) WHERE filmID = ?',
+    [filmID, filmID],
+    function(err, results) {
+      if (err) {
+        console.error('Error querying database:', err);
+        res.status(500).send('Error querying database');
+        return;
+      }
+      res.json(results);
+    }
+  );
+});
+
+// FIRST
+
 // NINE
 app.put('/:orderID/:status', (req, res) => {
   const orderID = req.params.orderID;
