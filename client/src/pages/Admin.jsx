@@ -33,7 +33,7 @@ function Admin() {
       .then(response => {
           if (response.ok) {
             sessionStorage.setItem("staff", `${staffInfo.username}`);
-            navigate('/Manage');
+            navigate('/AdminMenu');
             return true;
           } else {
               setError('Incorrect username or password.');

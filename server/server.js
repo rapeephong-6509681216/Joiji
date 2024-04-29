@@ -443,44 +443,40 @@ app.get('/orders/shipped/:user', (req, res) =>{
 
 // Phreuk
 
-//  let quota;
+// NINE
+app.put('/:orderID/:status', (req, res) => {
+  const orderID = req.params.orderID;
+  const status = req.params.status;
+   connection.query(
+    'UPDATE orders SET order_Status = ? WHERE orderID = ?',
+   [status,orderID],
+   function (err, results) {
+      if (err) {
+       console.error('Error querying database:', err);
+       res.status(500).send('Error querying databased');
+        return;
+      }
+      res.status(200).send('Quota updated');
+    }
+);
 
-// connection.query(
-//   'SELECT quota FROM subscription WHERE username = ?',
-//   [user],
-//   function (err, results) {
-//     if (err) {
-//       console.error('Error querying database:', err);
-//       res.status(500).send('Error querying database');
-//       return;
-//     }
-//     if (results.length === 0) {
-//       res.status(404).send('User not found');
-//       return;
-//     }
-//     quota = results[0].quota;
+ });
 
-//     if (quota === 0 || current_user_queue >= 5) {
-//       res.status(400).send('User has reached the maximum number of movies in queue');
-//       return;
-//     }
+ app.get('/orders', (req, res, next) => {
+  connection.query(
+    'SELECT * FROM `users` INNER JOIN orders ON users.username = orders.username INNER JOIN subscription ON subscription.username = orders.username' ,
+    function (err, results, fields) {
+      if (err) {
+        console.error('Error querying database:', err);
+        res.status(500).send('Error querying database');
+        return;
+      }
+      res.json(results);
+    }
+  )
+});
 
-// app.put('/:user/quota', (req, res) => {
-//   const user = req.params.user;
-//   connection.query(
-//     'UPDATE subscription SET quota = quota - 1 WHERE username = ?',
-//     [user],
-//     function (err, results) {
-//       if (err) {
-//         console.error('Error querying database:', err);
-//         res.status(500).send('Error querying database');
-//         return;
-//       }
-//       res.status(200).send('Quota updated');
-//     }
-//   );
-
-// });
+// NINE
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

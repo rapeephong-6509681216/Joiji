@@ -8,6 +8,7 @@ import Admin from "./pages/Admin";
 import AddressForm from "./components/AddressForm";
 import EditAddressForm from "./pages/EditAddressForm";
 import Queue from "./pages/Queue";
+import AdminMenu from "./pages/AdminMenu";
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
           <Route path='/AddressForm' element={<AddressForm />} />
           <Route path='/EditAddressForm' element={<EditAddressForm />} />
           <Route path='/Queue' element={<Queue />} />
+          <Route path='/AdminMenu' element={<AdminMenu />} />
         </Routes>
     </BrowserRouter>
   )
