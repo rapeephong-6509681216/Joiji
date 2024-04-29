@@ -10,7 +10,7 @@ function Navbar( { setSearchMovie } ) {
 
   return (
     <nav className='bg-stone-950 p-5 flex flex-col sm:flex-row justify-between'>
-      <Link to="/">
+      <Link to="/Menu">
         <img src={logo} alt='Company logo' className='w-32 md:w-36 lg:w-40 h-auto' />
       </Link>
       <div className='my-2 w-full sm:w-4/12 h-12'>

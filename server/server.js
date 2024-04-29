@@ -145,7 +145,7 @@ app.post('/:user/queue', (req, res) => {
         return;
       }
       connection.query(
-        'SELECT COUNT(*) as user_Queue FROM orders WHERE username = ?',
+        'SELECT COUNT(*) as user_Queue FROM orders WHERE username = ? and order_Status = "Booking"',
         [user],
         function (err, results) {
           if (err) {
@@ -161,7 +161,7 @@ app.post('/:user/queue', (req, res) => {
           }
 
           connection.query(
-            'SELECT * FROM orders WHERE username = ? AND filmID = ?',
+            'SELECT * FROM orders WHERE username = ? AND filmID = ? AND (order_Status = "Booking" OR order_Status = "Shipped")',
             [user, filmID],
             function (err, results) {
               if (err) {
