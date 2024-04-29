@@ -23,26 +23,39 @@ function Admin() {
       e.preventDefault();
       e.stopPropagation();
 
-      fetch(`${import.meta.env.VITE_API_URL}/staff`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(staffInfo)
-      })
-      .then(response => {
-          if (response.ok) {
-            sessionStorage.setItem("staff", `${staffInfo.username}`);
-            navigate('/AdminMenu');
-            return true;
-          } else {
-              setError('Incorrect username or password.');
-              setStaffInfo(prevState => ({ ...prevState, password: '' }));
-              setLoading(false);
-              return;
-          }
-          
-      })
+    fetch(`${import.meta.env.VITE_API_URL}/staff`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(staffInfo)
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        return response.json().then(err => { throw err; });
+      }
+    })
+    .then(data => {
+      if (data.message === 'Manager logged in') {
+        sessionStorage.setItem("staffId", `${data.staffid}`);
+        sessionStorage.setItem("staffUsername", `${data.username}`);
+        sessionStorage.setItem("permission", 1);
+        navigate('/AdminMenu');
+      } else if (data.message === 'Staff logged in') {
+        sessionStorage.setItem("staffId", `${data.staffid}`);
+        sessionStorage.setItem("staffUsername", `${data.username}`);
+        sessionStorage.setItem("permission", 0);
+        navigate('/AdminMenu');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      setError(error.message);
+      setStaffInfo(prevState => ({ ...prevState, password: '' }));
+      setLoading(false);
+    });
     }
     
     return (

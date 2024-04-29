@@ -2,6 +2,8 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const bodyParser = require('body-parser'); // TAE
+const multer = require('multer'); // CHING
+const path = require('path'); // CHING
 require('dotenv').config()
 
 const connection = mysql.createConnection({
@@ -240,20 +242,34 @@ app.post('/staff', (req, res) => {
   const password = req.body.password;
 
   connection.query(
-    'SELECT password FROM staffs WHERE username = ?',
-    [username],
+    `(SELECT normals.staffid AS normalStaffId, managers.staffid AS managerStaffId, normals.username AS normalUser, managers.username AS managerUser, 
+    normals.password AS normalPassword, managers.password AS managerPassword, managers.permission 
+    FROM normals 
+    LEFT JOIN managers ON normals.username = managers.username 
+    WHERE normals.username = ?)
+    UNION
+    (SELECT normals.staffid AS normalStaffId, managers.staffid AS managerStaffId, normals.username AS normalUser, managers.username AS managerUser, 
+    normals.password AS normalPassword, managers.password AS managerPassword, managers.permission 
+    FROM managers 
+    LEFT JOIN normals ON managers.username = normals.username 
+    WHERE managers.username = ?)`,
+    [username, username],
     function (err, results) {
       if (err) {
         console.error('Error querying database:', err);
         res.status(500).send('Error querying database');
         return;
       }
-      if (results.length <= 0 || results[0].password !== password) {
-        res.status(400).send('Incorrect username or password.');
+      if (results.length <= 0 || (results[0].normalPassword !== password && results[0].managerPassword !== password)) {
+        res.status(401).json({message: 'Incorrect username or password.'});
         return;
       }
-
-      res.status(200).send('User logged in');
+  
+      if (results[0].managerUser === username) {
+        res.status(200).json({message: 'Manager logged in', staffid: results[0].managerStaffId, username: results[0].managerUser});
+      } else {
+        res.status(200).json({message: 'Staff logged in', staffid: results[0].normalStaffId, username: results[0].normalUser});
+      }
     }
   );
 });
@@ -478,6 +494,188 @@ app.put('/:orderID/:status', (req, res) => {
 
 // NINE
 
+// CHINGCHING
+var filename;
+app.post('/films', (req, res) => {
+  const title = req.body.title;
+  const stock = req.body.stock;
+  const outline = req.body.outline;
+  const genre = req.body.genre;
+  const poster_Path = req.body.poster_Path;
+  filename = poster_Path;
+  const staff = req.body.staff;
+  const adminUser = req.body.adminUser;
+
+
+  connection.query("INSERT INTO films (title, stock, outline, genre, avg_rating, film_queue, poster_path, staffID, username) VALUES(?,?,?,?,?,?,?,?,?)",
+[title, stock, outline, genre, 0.0, 0, poster_Path, staff, adminUser],
+(err, result) => {
+  if(err) {
+    console.log(err);
+  } else {
+    res.send(result.insertId.toString());
+  }
+})
+})
+
+app.post('/stars', (req, res) => {
+  const star = req.body.star;
+  const filmID = req.body.filmId;
+
+  connection.query("INSERT INTO stars (filmID, star) VALUES(?, ?)",
+[filmID, star],
+(err, result) => {
+  if(err) {
+    console.log(err);
+  } else {
+    res.send("Values inserted");
+  }
+})
+})
+
+app.post('/directors', (req, res) => {
+  const director = req.body.director;
+  const filmID = req.body.filmId;
+
+  connection.query("INSERT INTO directors (filmID, director) VALUES(?, ?)",
+[filmID, director],
+(err, result) => {
+  if(err) {
+    console.log(err);
+  } else {
+    res.send("Values inserted");
+  }
+})
+})
+
+app.get('/movies', (req, res) => {
+  connection.query("SELECT filmID, title, stock FROM films", (err, result) => {
+    if(err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  })
+})
+
+app.get('/foreign', (req, res) => {
+  connection.query("SELECT * FROM stars", (err, result) => {
+    if(err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  })
+})
+
+app.get('/moreforeign', (req, res) => {
+  connection.query("SELECT * FROM directors", (err, result) => {
+    if(err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  })
+})
+
+app.get('/orderforeign', (req, res) => {
+  connection.query("SELECT * FROM orders", (err, result) => {
+    if(err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  })
+})
+
+app.get('/edit', (req, res) => {
+  connection.query("SELECT edits.*, orders.* FROM edits INNER JOIN orders ON edits.orderId = orders.orderId", (err, result) => {
+    if(err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  })
+})
+
+app.delete('/movies/:filmID', (req, res) => {
+  const id = req.params.filmID;
+  connection.query("DELETE FROM films WHERE filmID = ?", id, (err, result) => {
+  if(err) {
+    console.log(err);
+  } else {
+    res.send(result);
+  }
+})
+})
+
+app.delete('/foreign/:filmID', (req, res) => {
+  const id = req.params.filmID;
+  connection.query("DELETE FROM stars WHERE filmID = ?", id, (err, result) => {
+  if(err) {
+    console.log(err);
+  } else {
+    res.send(result);
+  }
+})
+})
+
+app.delete('/moreforeign/:filmID', (req, res) => {
+  const id = req.params.filmID;
+  connection.query("DELETE FROM directors WHERE filmID = ?", id, (err, result) => {
+  if(err) {
+    console.log(err);
+  } else {
+    res.send(result);
+  }
+})
+})
+
+app.delete('/edit/:filmID', (req, res) => {
+  const id = req.params.filmID;
+  connection.query("DELETE e FROM edits e JOIN orders o ON e.orderID = o.orderID WHERE o.filmID = ?", id, (err, result) => {
+  if(err) {
+    console.log(err);
+  } else {
+    res.send(result);
+  }
+})
+})
+
+app.delete('/orderforeign/:filmID', (req, res) => {
+  const id = req.params.filmID;
+  connection.query("DELETE FROM orders WHERE filmID = ?", id, (err, result) => {
+  if(err) {
+    console.log(err);
+  } else {
+    res.send(result);
+  }
+})
+})
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '../client/public/posters'));
+  },
+  filename: function (req, file, cb) {
+    cb(null, filename);
+  }
+});
+
+const upload = multer({ storage: storage }).single('image');
+
+app.post('/upload', (req, res, next) => {
+  upload(req, res, function(err) {
+    if (err instanceof multer.MulterError) {
+      return res.status(500).json(err);
+    } else if (err) {
+      return res.status(500).json(err);
+    }
+    res.status(200).send('File uploaded successfully');
+  });
+});
+
+// CHING
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

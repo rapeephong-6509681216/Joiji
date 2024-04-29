@@ -59,7 +59,8 @@ function Queue() {
           return <Home2 homeData={homeData} /> 
       } else if (page === 'Queue3') {
           return <Queue3 queueData={queueData} />
-      } else if (page === 'History') {}
+      } else if (page === 'History') {
+      }
   };
 
 

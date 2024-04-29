@@ -1,13 +1,14 @@
-import { useState, useEffect, React } from 'react'
 import AdminNavbar from '../components/AdminNavbar';
-import Order from '../components/Order';
+import AddMovieForm from '../components/AddMovieForm';
+import Order from '../components/Order'
+import Remove from '../components/RemoveForm';
 
-function AdminMenu() {
+function RemoveMovie() {
 
     const allMenu = {
         "Order":<Order></Order>,
-        "Add Movie":<div>Add Movie page</div>,         //Add Add Movie page
-        "Remove Movie":<div>Remove Movie page</div>,   //Add Remove Movie page
+        "Add Movie":<AddMovieForm></AddMovieForm>,         //Add Add Movie page
+        "Remove Movie":<Remove></Remove>,   //Add Remove Movie page
         "Setting":<div>Setting page</div>              //Add Setting page
     }
 
@@ -16,4 +17,4 @@ function AdminMenu() {
         </div>);
 }
 
-export default AdminMenu ;
+export default RemoveMovie 
