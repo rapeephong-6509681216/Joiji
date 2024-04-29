@@ -338,6 +338,111 @@ app.post('/register', (req, res) => {
 });
 // TAE
 
+// Phreuk
+app.get('/orders/shipped/:user', (req, res) =>{
+  const user = req.params.user;
+
+  connection.query(
+    'SELECT o.rentDate,f.title,o.rating FROM orders as o JOIN films AS f ON o.filmID = f.filmID JOIN users AS u ON o.username = u.username WHERE order_Status = "Shipped" AND o.username = ? ORDER BY o.rentDate ASC ',
+    [user],
+    function (err, results) {
+    if (err) {
+      console.error('Error querying database:', err);
+      res.status(500).send('Error querying database');
+      return;
+    }
+    res.json(results);
+  }
+  );
+  });
+  
+  app.get('/orders/booking/:user', (req, res) =>{
+    const user = req.params.user;
+
+    connection.query(
+      'SELECT f.title,o.rating,f.genre,o.user_Queue,o.orderID FROM orders as o JOIN films AS f ON o.filmID = f.filmID JOIN users AS u ON o.username = u.username WHERE order_Status = "Booking" AND o.username = ?  ORDER BY o.user_Queue ASC',
+      [user],
+      function (err, results) {
+      if (err) {
+        console.error('Error querying database:', err);
+        res.status(500).send('Error querying database');
+        return;
+      }
+      res.json(results);
+    }
+    );
+    });
+  
+    app.patch('/orders/CancelledQueue/:user', (req, res) => {
+      const user = req.params.user;
+      const user_Queue = req.body;
+
+      connection.query(
+          'UPDATE orders SET order_Status = "Cancelled",user_Queue = NULL WHERE user_Queue = ? AND order_Status = "Booking" AND username = ? ',
+          [user_Queue.user_Queue, user],
+          function (err, results) {
+              if (err) {
+                  console.error('Error querying database:', err);
+                  res.status(500).send('Error querying database');
+                  return;
+              }
+  
+              connection.query(
+                  'UPDATE orders SET user_Queue = user_Queue - 1 WHERE user_Queue > ? AND order_Status = "Booking" AND username = ?',
+                  [user_Queue.user_Queue, user],
+                  function (err, results) {
+                      if (err) {
+                          console.error('Error querying database:', err);
+                          res.status(500).send('Error querying database');
+                          return;
+                      }
+  
+                   
+                      res.json( results);
+                  }
+              );
+          }
+      );
+  });
+
+    app.patch('/orders/moveQueues/:user', async (req, res) => {
+      const user = req.params.user;
+      const { orderID, user_Queue, direction } = req.body;
+  
+      if (!orderID || !user_Queue || direction === undefined) {
+          return res.status(400).json({ error: 'Invalid request parameters' });
+      }
+  
+      const maxUserQueueQuery = 'SELECT MAX(user_Queue) AS max_user_queue FROM orders WHERE username = ? AND order_Status = "Booking"';
+      const [maxUserQueueResults] = await connection.promise().query(maxUserQueueQuery, [user]);
+  
+      const maxUserQueue = maxUserQueueResults[0].max_user_queue;
+  
+      try {
+          if ((user_Queue < maxUserQueue && direction === 1) || (user_Queue <= maxUserQueue && direction === -1 && (user_Queue-1 != 0))) {
+              if (direction === -1) { 
+                  const swap = 'UPDATE orders SET user_Queue = user_Queue + 1 WHERE user_Queue = ? AND username = ? AND order_Status = "Booking"';
+                  await connection.promise().query(swap, [user_Queue - 1, user]);
+              } else if (direction === 1) {
+                  const swap = 'UPDATE orders SET user_Queue = user_Queue - 1 WHERE user_Queue = ? AND username = ? AND order_Status = "Booking"';
+                  await connection.promise().query(swap, [user_Queue + 1, user]);
+              }
+  
+              const updateQuery = 'UPDATE orders SET user_Queue = user_Queue + ? WHERE orderID = ? AND username = ? AND order_Status = "Booking"';
+              await connection.promise().query(updateQuery, [direction, orderID, user]);
+  
+              res.json({ success: true });
+          } else {
+              res.status(400).json({ error: 'Invalid move direction or user queue position' });
+          }
+      } catch (err) {
+          console.error('Error querying database:', err);
+          res.status(500).json({ error: 'Error querying database' });
+      }
+  });
+
+// Phreuk
+
 //  let quota;
 
 // connection.query(

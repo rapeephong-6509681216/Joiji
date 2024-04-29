@@ -7,6 +7,7 @@ import SignIn from "./pages/SignIn";
 import Admin from "./pages/Admin";
 import AddressForm from "./components/AddressForm";
 import EditAddressForm from "./pages/EditAddressForm";
+import Queue from "./pages/Queue";
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
           <Route path='/Admin' element={<Admin />} />
           <Route path='/AddressForm' element={<AddressForm />} />
           <Route path='/EditAddressForm' element={<EditAddressForm />} />
+          <Route path='/Queue' element={<Queue />} />
         </Routes>
     </BrowserRouter>
   )
