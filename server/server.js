@@ -378,7 +378,7 @@ app.get('/orders/shipped/:user', (req, res) =>{
       const user_Queue = req.body;
 
       connection.query(
-          'UPDATE orders SET order_Status = "Cancelled",user_Queue = NULL WHERE user_Queue = ? AND order_Status = "Booking" AND username = ? ',
+          'UPDATE orders SET order_Status = "Canceled",user_Queue = NULL WHERE user_Queue = ? AND order_Status = "Booking" AND username = ? ',
           [user_Queue.user_Queue, user],
           function (err, results) {
               if (err) {
