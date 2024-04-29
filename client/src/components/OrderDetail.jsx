@@ -4,6 +4,8 @@ import React from 'react'
 function OrderDetail(props) {
 
   const { order, onBgClick, userQuota} = props;
+  const staffID = sessionStorage.getItem('staffId');
+  const username = order.username
 
   return (
 
@@ -32,7 +34,7 @@ function OrderDetail(props) {
 
          <div className='Main-Item'>
          <p className='font-bold'>ITEM</p>
-         <p>{order.username}</p>
+         <p>{order.title}</p>
          </div>
 
          <div className='Main-Country'>
@@ -68,7 +70,8 @@ function OrderDetail(props) {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
-          }
+          },
+          body: JSON.stringify({ staffID, username })
           })}}>Shipped</button></div>
 
           <div className='Click'><button onClick={() => 
@@ -76,7 +79,8 @@ function OrderDetail(props) {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
-          }
+          },
+          body: JSON.stringify({ staffID, username })
           })}}>Returned</button></div>
 
           <div className="Click"><button onClick={() => 
@@ -84,7 +88,8 @@ function OrderDetail(props) {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
-          }
+          },
+          body: JSON.stringify({ staffID, username })
           })}}>Canceled</button></div>
     
           </div>

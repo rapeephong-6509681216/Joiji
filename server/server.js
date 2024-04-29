@@ -515,24 +515,49 @@ app.patch('/orders/history/avgrating/:filmID', (req, res) => {
 app.put('/:orderID/:status', (req, res) => {
   const orderID = req.params.orderID;
   const status = req.params.status;
-   connection.query(
-    'UPDATE orders SET order_Status = ? WHERE orderID = ?',
-   [status,orderID],
-   function (err, results) {
+  const staffID = req.body.staffID; // assuming staffID is sent in the request body
+  const username = req.body.username; // assuming username is sent in the request body
+
+  let sqlQuery = '';
+  if (status === 'Returned') {
+    sqlQuery = 'UPDATE orders SET order_Status = ?, ReturnDate = NOW() WHERE orderID = ?';
+  } else if (status === 'Shipped') {
+    sqlQuery = 'UPDATE orders SET order_Status = ?, user_queue = NULL WHERE orderID = ?';
+  } else {
+    sqlQuery = 'UPDATE orders SET order_Status = ? WHERE orderID = ?';
+  }
+
+  connection.query(
+    sqlQuery,
+    [status, orderID],
+    function (err, results) {
       if (err) {
-       console.error('Error querying database:', err);
-       res.status(500).send('Error querying databased');
+        console.error('Error querying database:', err);
+        res.status(500).send('Error querying database');
         return;
       }
-      res.status(200).send('Quota updated');
-    }
-);
 
- });
+      // After updating the order status, insert a new record into the edits table
+      const insertEditsQuery = 'INSERT INTO edits (orderID, staffID, username) VALUES (?, ?, ?)';
+      connection.query(
+        insertEditsQuery,
+        [orderID, staffID, username],
+        function (err, results) {
+          if (err) {
+            console.error('Error updating edits table:', err);
+            res.status(500).send('Error updating edits table');
+            return;
+          }
+          res.status(200).send('Order status and edits table updated');
+        }
+      );
+    }
+  );
+});
 
  app.get('/orders', (req, res, next) => {
   connection.query(
-    'SELECT * FROM `users` INNER JOIN orders ON users.username = orders.username INNER JOIN subscription ON subscription.username = orders.username' ,
+    'SELECT orders.username, orders.orderID, orders.order_Status, users.city, users.phone, users.country, users.addressLine, users.zipcode, films.title FROM `users` INNER JOIN orders ON users.username = orders.username INNER JOIN subscription ON subscription.username = orders.username INNER JOIN films ON films.filmid = orders.filmid' ,
     function (err, results, fields) {
       if (err) {
         console.error('Error querying database:', err);

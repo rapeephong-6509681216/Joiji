@@ -6,6 +6,7 @@ import Order from './Order';
 function AdminNavbar(props) {
     const [selectedNavBar, setSelectedNavBar] = useState('Order');
     const [open, setOpen] = useState(true);
+    const username = sessionStorage.getItem('staffUsername');
     const Menus = [
       { title: "Order", src: "order" ,w:2,h:2 },
       { title: "Add Movie", src: "add" },
@@ -60,11 +61,11 @@ function AdminNavbar(props) {
         </li>
       ))}
       
-      <li className='jj'>
+      <li className='jj absolute bottom-0'>
         <div className={`flex  rounded-md p-2   text-gray-300 text-sm items-center gap-x-4 mt-80 `}>
           <img src={`./src/assets/account.png`} className={'mt-15 w-6 h-6'} />
           <span className={`${!open && "hidden"} flex origin-left duration-200`}>
-            <h1 className='username'>Nopawit Inon</h1>
+            <h1 className='username'>{username}</h1>
             <h1 className='dot'>...</h1>
           </span> 
          
