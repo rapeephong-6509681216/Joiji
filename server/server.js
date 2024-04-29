@@ -219,7 +219,7 @@ app.post('/user', (req, res) => {
   const password = req.body.password;
 
   connection.query(
-    'SELECT password FROM users WHERE username = ?',
+    'SELECT password FROM users WHERE BINARY username = ?',
     [username],
     function (err, results) {
       if (err) {
@@ -246,13 +246,13 @@ app.post('/staff', (req, res) => {
     normals.password AS normalPassword, managers.password AS managerPassword, managers.permission 
     FROM normals 
     LEFT JOIN managers ON normals.username = managers.username 
-    WHERE normals.username = ?)
+    WHERE BINARY normals.username = ?)
     UNION
     (SELECT normals.staffid AS normalStaffId, managers.staffid AS managerStaffId, normals.username AS normalUser, managers.username AS managerUser, 
     normals.password AS normalPassword, managers.password AS managerPassword, managers.permission 
     FROM managers 
     LEFT JOIN normals ON managers.username = normals.username 
-    WHERE managers.username = ?)`,
+    WHERE BINARY managers.username = ?)`,
     [username, username],
     function (err, results) {
       if (err) {

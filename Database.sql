@@ -18,7 +18,8 @@ CREATE TABLE subscription (
     quota INT,
     subType VARCHAR(20),
     price DECIMAL(10, 2),
-    FOREIGN KEY (username) REFERENCES users(username)
+    FOREIGN KEY (username) REFERENCES users(username),
+    PRIMARY KEY (subId)
 );
 
 CREATE TABLE staffs (
