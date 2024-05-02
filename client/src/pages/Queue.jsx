@@ -29,13 +29,13 @@ function Queue() {
 
         useEffect(() => {
           
-          fetch(`${import.meta.env.VITE_API_URL}/orders/booking/${user}`)
+          fetch(`${import.meta.env.VITE_API_URL}/orders/history/${user}`)
             .then(response => response.json())
-            .then(dataqueue => {
-              setQueueData(dataqueue)
+            .then(datahistory => {
+              setHistoryData(datahistory)
             })
             .catch(error => console.error('Error:', error));
-          } , [queueData]);
+          } , []);
           
       useEffect(() => {
         if (searchData != '') {

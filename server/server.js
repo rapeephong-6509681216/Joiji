@@ -460,11 +460,11 @@ app.get('/orders/shipped/:user', (req, res) =>{
 // Phreuk
 
 // FIRST
-app.get('/orders/history', (req, res) => {
-  const filmID = req.params.filmID;
+app.get('/orders/history/:user', (req, res) => {
+  const user = req.params.user;
   connection.query(
-    'SELECT f.title,o.username,o.rating,o.returnDate,o.orderID,o.filmID FROM orders as o JOIN films AS f ON o.filmID = f.filmID JOIN users AS u ON o.username = u.username WHERE order_Status = "Returned" ',
-    [filmID],
+  'SELECT f.title, o.username, o.rating, o.returnDate, o.orderID, o.filmID FROM orders AS o JOIN films AS f ON o.filmID = f.filmID JOIN users AS u ON o.username = u.username WHERE o.order_Status = "Returned" AND o.username = ? ',
+  [user],
     function (err, results) {
       if (err) {
         console.error('Error querying database:', err);
@@ -557,7 +557,7 @@ app.put('/:orderID/:status', (req, res) => {
 
  app.get('/orders', (req, res, next) => {
   connection.query(
-    'SELECT orders.username, orders.orderID, orders.order_Status, users.city, users.phone, users.country, users.addressLine, users.zipcode, films.title FROM `users` INNER JOIN orders ON users.username = orders.username INNER JOIN subscription ON subscription.username = orders.username INNER JOIN films ON films.filmid = orders.filmid' ,
+    'SELECT orders.username, orders.orderID, orders.order_Status, users.city, users.phone, users.country, users.addressLine, users.zipcode, films.title, subscription.quota FROM `users` INNER JOIN orders ON users.username = orders.username INNER JOIN subscription ON subscription.username = orders.username INNER JOIN films ON films.filmid = orders.filmid' ,
     function (err, results, fields) {
       if (err) {
         console.error('Error querying database:', err);
